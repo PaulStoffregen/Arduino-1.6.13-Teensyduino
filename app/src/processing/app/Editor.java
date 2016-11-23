@@ -1073,6 +1073,8 @@ public class Editor extends JFrame implements RunnerListener {
         portMenu.setEnabled(false);
         portMenu.setText(tr("Port") + " (emulated serial)");
         return;
+      } else {
+        portMenu.setText(tr("Port"));
       }
     }
 
