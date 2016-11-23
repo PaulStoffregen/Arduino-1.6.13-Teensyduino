@@ -124,7 +124,7 @@ public class TeensyMonitor extends AbstractTextMonitor {
 
     if (fake == null) {
       // real USB serial
-      if (port == null) throw new SerialException("no serial port name defined");
+      if (port == null) throw new SerialException("No serial port, please select with Tools > Port");
       if (restart) {
         serial = new Serial(port, 150) {
           @Override
