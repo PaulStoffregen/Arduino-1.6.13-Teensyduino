@@ -2773,6 +2773,19 @@ public class Editor extends JFrame implements RunnerListener {
       lineStatus.setBoardName("-");
     lineStatus.setSerialPort(PreferencesData.get("serial.port"));
     lineStatus.repaint();
+    if (BaseNoGui.isTeensyduino()) {
+      if (serialMonitor != null && !(serialMonitor instanceof TeensyMonitor)) {
+        if (!(serialMonitor.isClosed())) {
+          try {
+            serialMonitor.close();
+          } catch (Exception e) {
+          }
+        }
+        serialMonitor.setVisible(false);
+        serialMonitor.dispose();
+        serialMonitor = null;
+      }
+    }
   }
 
 
