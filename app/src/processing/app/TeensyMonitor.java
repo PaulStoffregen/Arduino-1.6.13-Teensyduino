@@ -101,11 +101,17 @@ public class TeensyMonitor extends AbstractTextMonitor {
     super.enableWindow(enable);
   }
 
-
+  private String teensyPortName() {
+    if (BaseNoGui.getBoardPreferences().get("fake_serial") == null) {
+       return getBoardPort().getAddress();
+    } else {
+       return "(emulated serial)";
+    }
+  }
 
   // called from Editor.java
   public void open() throws Exception {
-    String port = getBoardPort().getAddress();
+    String port = teensyPortName();
     if (debug) System.out.println("TeensyMonitor open " + port);
     if (Thread.currentThread() != reopener) reopen_abort();
     if (serial != null) return;
@@ -156,6 +162,7 @@ public class TeensyMonitor extends AbstractTextMonitor {
     textArea.setText("");
     isOpen = true;
     enableWindow(true);
+    setTitle("TeensyMonitor: " + port + " Online");
 
     onlineChecker = new Thread() {
       public void run() {
@@ -197,6 +204,7 @@ public class TeensyMonitor extends AbstractTextMonitor {
     if (!isVisible()) return;
     reopen_abort();
     setBoardPort(boardPort);
+    setTitle("TeensyMonitor: " + teensyPortName() + " Offline");
     if (isOpen) return;
 
     reopener = new Thread() {
@@ -245,6 +253,7 @@ public class TeensyMonitor extends AbstractTextMonitor {
   // called from Editor.java
   public void close() throws Exception {
     if (debug) System.out.println("TeensyMonitor close");
+    setTitle("TeensyMonitor: Closed");
     interrupt_thread(reopener);
     interrupt_thread(onlineChecker);
     isOpen = false;
